@@ -13122,6 +13122,8 @@ div#notebook {
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">ipywidgets</span> <span class="kn">import</span> <span class="n">interact</span>
+<span class="kn">import</span> <span class="nn">nbinteract</span> <span class="k">as</span> <span class="nn">nbi</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 
     </div>
@@ -13138,25 +13140,16 @@ div#notebook {
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">square</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span>
-</pre></div>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">rpy2.robjects</span> <span class="k">as</span> <span class="nn">robjects</span>
+<span class="c1"># preinstalled R-function sum</span>
+<span class="n">rsum</span> <span class="o">=</span> <span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;sum&#39;</span><span class="p">]</span>
+<span class="n">vec</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span><span class="mi">234</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">34</span><span class="p">]</span>
+<span class="n">summe</span><span class="o">=</span><span class="n">rsum</span><span class="p">(</span><span class="n">robjects</span><span class="o">.</span><span class="n">IntVector</span><span class="p">(</span><span class="n">vec</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
 
-    </div>
-</div>
-</div>
-
-  </div>
-
-  
-
-  <div class="
-      cell border-box-sizing code_cell rendered">
-    <div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">interact</span><span class="p">(</span><span class="n">square</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Summe aus &quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-------&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">summe</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13166,6 +13159,80 @@ div#notebook {
 <div class="output_wrapper">
 <div class="output">
 
+
+<div class="output_area">
+
+    
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Summe aus 
+[12, 234, 1, 4, -1, 34]
+-------
+284
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+  </div>
+
+  
+
+  <div class="
+      cell border-box-sizing code_cell rendered">
+    <div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># laden der Funktion &#39;test_R_function_pileibnitz.r&#39;</span>
+<span class="c1"># die hier im Online-Verzeichnis liegt</span>
+<span class="n">robjects</span><span class="o">.</span><span class="n">r</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">       source(&#39;test_R_function_pileibnitz.r&#39;)</span>
+<span class="s1">&#39;&#39;&#39;</span><span class="p">);</span>
+<span class="n">pifun</span><span class="o">=</span><span class="n">robjects</span><span class="o">.</span><span class="n">globalenv</span><span class="p">[</span><span class="s1">&#39;test_R_function_pileibnitz&#39;</span><span class="p">];</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+  </div>
+
+  
+
+  <div class="
+      cell border-box-sizing code_cell rendered">
+    <div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># R-Funktion muss nochmal als Py-Funktion deklariert werden</span>
+<span class="k">def</span> <span class="nf">py_pifun</span><span class="p">(</span><span class="n">Elemente</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pifun</span><span class="p">(</span><span class="n">Elemente</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Berechne Pi aus __ Elementen&quot;</span><span class="p">)</span>
+<span class="n">interact</span><span class="p">(</span><span class="n">py_pifun</span><span class="p">,</span> <span class="n">Elemente</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="p">,</span><span class="mi">20</span><span class="p">));</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Berechne Pi aus __ Elementen
+</pre>
+</div>
+</div>
 
 <div class="output_area">
 
@@ -13181,18 +13248,6 @@ div#notebook {
 
 </div>
 
-<div class="output_area">
-
-    
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&lt;function __main__.square(x)&gt;</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -13206,25 +13261,14 @@ div#notebook {
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">friends</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">number</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> has </span><span class="si">{}</span><span class="s1"> friends!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">number</span><span class="p">)</span>
-</pre></div>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#import getpass</span>
+<span class="c1">#ui = getpass.getpass()</span>
+<span class="n">whichhist</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Input type of histogram [1]/[2]: &quot;</span><span class="p">)</span>
 
-    </div>
-</div>
-</div>
-
-  </div>
-
-  
-
-  <div class="
-      cell border-box-sizing code_cell rendered">
-    <div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">interact</span><span class="p">(</span><span class="n">friends</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Sam&#39;</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">));</span>
+<span class="k">if</span> <span class="n">whichhist</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;wir teilen die daten in gleiche intervalle ein&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;wir teilen die daten in gleiche anzahl ein&#39;</span><span class="p">)</span>  
 </pre></div>
 
     </div>
@@ -13239,52 +13283,11 @@ div#notebook {
 
     
 
-
-
-  <div class="output_subarea output_widget_view ">
-    <button class="js-nbinteract-widget">
-      Loading widgets...
-    </button>
-  </div>
-
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Input type of histogram [1]/[2]: 1
+wir teilen die daten in gleiche intervalle ein
+</pre>
 </div>
-
-</div>
-</div>
-
-  </div>
-
-  
-
-  <div class="
-      cell border-box-sizing code_cell rendered">
-    <div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">interact</span><span class="p">(</span><span class="n">friends</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Sam&#39;</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;One&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Five&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;Ten&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">});</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    
-
-
-
-  <div class="output_subarea output_widget_view ">
-    <button class="js-nbinteract-widget">
-      Loading widgets...
-    </button>
-  </div>
-
 </div>
 
 </div>
